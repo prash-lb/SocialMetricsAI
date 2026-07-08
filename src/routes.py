@@ -62,7 +62,7 @@ def analyze_tweets():
     Endpoint principal exigeant un tableau de chaînes (string[])
     Retourne la structure JSON demandée : {"tweet": score}
     """
-    # 1. GESTION DES ERREURS (Validation du format global)
+
     if not request.is_json:
         return jsonify(
             {"error": "Le format de la requête doit être strictement du JSON."}
@@ -70,10 +70,8 @@ def analyze_tweets():
 
     data = request.get_json()
 
-    # Pour être robuste, on accepte le tableau brut [] ou enveloppé dans un objet {"tweets": []}
     tweets = data if isinstance(data, list) else data.get("tweets")
 
-    # 2. GESTION DES ERREURS (Validation fine des données reçues)
     if tweets is None or not isinstance(tweets, list):
         return jsonify(
             {
@@ -96,21 +94,15 @@ def analyze_tweets():
             {"error": "Les modèles ne sont pas initialisés sur le serveur."}
         ), 500
 
-    # 3. CALCUL ALGORITHMIQUE DES SCORES
     response_data = {}
     try:
-        # Transformation numérique des textes reçus
         X = vectorizer.transform(tweets)
 
-        # Calcul des probabilités pour chaque modèle indépendant
-        # predict_proba renvoie [prob_0, prob_1]. On extrait l'indice 1 (probabilité du OUI)
         proba_pos = model_positive.predict_proba(X)[:, 1]
         proba_neg = model_negative.predict_proba(X)[:, 1]
 
-        # Formule mathématique du sujet : Score = P(positive) - P(negative)
         for idx, tweet in enumerate(tweets):
             score_final = proba_pos[idx] - proba_neg[idx]
-            # On arrondit à 4 décimales pour une réponse JSON propre
             response_data[tweet] = round(float(score_final), 4)
 
         return jsonify(response_data), 200
