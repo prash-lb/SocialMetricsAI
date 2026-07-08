@@ -31,7 +31,7 @@ def hello_world():
     return jsonify(message="Hello from your Flask API!")
 
 
-@api_bp.route("/api/health", methods=["GET"])
+@api_bp.route("/health", methods=["GET"])
 def health_check():
     """
     Endpoint de contrôle pour valider la connexion MySQL depuis l'API.
