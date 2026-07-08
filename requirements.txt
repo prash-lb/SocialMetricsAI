@@ -1,3 +1,7 @@
 Flask
 Flask-SQLAlchemy
 PyMySQL
+scikit-learn
+pandas
+mysql-connector-python
+joblib
