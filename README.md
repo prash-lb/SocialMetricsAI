@@ -109,7 +109,7 @@ S'assurer que :
 Lance l'entraînement du vectoriseur TF-IDF et des deux modèles de régression logistique :
 
 ```bash
-python src/model.py
+docker compose exec api python src/model.py
 ```
 
 **Résultat attendu :**
@@ -130,29 +130,13 @@ Les modèles sont sauvegardés dans le dossier `models/` :
 Après l'entraînement, lance l'évaluation pour voir les métriques de performance sur un jeu de validation :
 
 ```bash
-python src/evaluate.py
+docker compose exec api python src/evaluate.py
 ```
 
 **Métriques affichées :**
 - Classification Report : Precision, Recall, F1-Score
 - Confusion Matrix : TP, FP, TN, FN
 - Rapport distinct pour chaque modèle (positif et négatif)
-
-**Exemple de sortie :**
-```
- --- DÉBUT DE L'ÉVALUATION DU MODÈLE --- 
-
-=== 1. PERFORMANCES DU MODÈLE POSITIF ===
-
-📜 Rapport de Classification (Positif) :
-              precision    recall  f1-score   support
-
-           0       0.92      0.88      0.90        34
-           1       0.85      0.90      0.87        26
-
-=== 2. PERFORMANCES DU MODÈLE NÉGATIF ===
-...
-```
 
 ### Flux complet
 
