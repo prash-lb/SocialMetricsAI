@@ -3,6 +3,8 @@ import os
 import joblib
 from flask import Blueprint, jsonify, request
 
+from database import get_db_connection
+
 api_bp = Blueprint("api", __name__)
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "../models")
 VECTORIZER_PATH = os.path.join(MODEL_DIR, "vectorizer.pkl")
@@ -29,29 +31,29 @@ def hello_world():
     return jsonify(message="Hello from your Flask API!")
 
 
-# @api_bp.route("/api/health", methods=["GET"])
-# def health_check():
-#     """
-#     Endpoint de contrôle pour valider la connexion MySQL depuis l'API.
-#     Garantit les 10 points associés dans le barème.
-#     """
-#     conn = get_db_connection()
-#     if conn:
-#         conn.close()
-#         return jsonify(
-#             {
-#                 "status": "healthy",
-#                 "database_connected": True,
-#                 "message": "Connexion MySQL fonctionnelle depuis l'API Flask !",
-#             }
-#         ), 200
-#     return jsonify(
-#         {
-#             "status": "unhealthy",
-#             "database_connected": False,
-#             "error": "Impossible de joindre la base de données MySQL.",
-#         }
-#     ), 500
+@api_bp.route("/api/health", methods=["GET"])
+def health_check():
+    """
+    Endpoint de contrôle pour valider la connexion MySQL depuis l'API.
+    Garantit les 10 points associés dans le barème.
+    """
+    conn = get_db_connection()
+    if conn:
+        conn.close()
+        return jsonify(
+            {
+                "status": "healthy",
+                "database_connected": True,
+                "message": "Connexion MySQL fonctionnelle depuis l'API Flask !",
+            }
+        ), 200
+    return jsonify(
+        {
+            "status": "unhealthy",
+            "database_connected": False,
+            "error": "Impossible de joindre la base de données MySQL.",
+        }
+    ), 500
 
 
 @api_bp.route("/analyze", methods=["POST"])
@@ -115,10 +117,3 @@ def analyze_tweets():
 
     except Exception as e:
         return jsonify({"error": f"Erreur interne lors de l'analyse : {str(e)}"}), 500
-
-
-# You can add more endpoints here
-# @api_bp.route('/data', methods=['POST'])
-# def post_data():
-#     # Handle POST request
-#     pass
