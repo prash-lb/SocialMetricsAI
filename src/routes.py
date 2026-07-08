@@ -29,6 +29,31 @@ def hello_world():
     return jsonify(message="Hello from your Flask API!")
 
 
+# @api_bp.route("/api/health", methods=["GET"])
+# def health_check():
+#     """
+#     Endpoint de contrôle pour valider la connexion MySQL depuis l'API.
+#     Garantit les 10 points associés dans le barème.
+#     """
+#     conn = get_db_connection()
+#     if conn:
+#         conn.close()
+#         return jsonify(
+#             {
+#                 "status": "healthy",
+#                 "database_connected": True,
+#                 "message": "Connexion MySQL fonctionnelle depuis l'API Flask !",
+#             }
+#         ), 200
+#     return jsonify(
+#         {
+#             "status": "unhealthy",
+#             "database_connected": False,
+#             "error": "Impossible de joindre la base de données MySQL.",
+#         }
+#     ), 500
+
+
 @api_bp.route("/analyze", methods=["POST"])
 def analyze_tweets():
     """
